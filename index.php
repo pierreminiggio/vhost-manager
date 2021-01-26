@@ -21,6 +21,8 @@ while (true) {
 function displayHosts(string $vhostFile, string $sslFile): void
 {
     list($vhostNamesFromVhostFile, $vhostNamesFromSslFile) = readHosts($vhostFile, $sslFile);
+    sort($vhostNamesFromVhostFile);
+    sort($vhostNamesFromSslFile);
 
     $numberOfHosts = count($vhostNamesFromVhostFile);
 
