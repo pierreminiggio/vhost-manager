@@ -93,7 +93,14 @@ function readHostnamesFromFile(
     $items = parseItemsInsideTags($vhostStartTag, $vhostEndTag, file_get_contents($file));
 
     $names = [];
-    foreach ($items as $item) {
+    foreach ($items as $index => $item) {
+
+        if ($index === 0) {
+            continue;
+        }
+
+        $item = trim($item);
+
         if ($item === '') {
             continue;
         }
