@@ -12,7 +12,7 @@ while (true) {
             displayHosts($vhostFile, $sslFile);
             break;
         case 'a':
-            askForHostInfosAndAddHost($vhostFile, $sslFile);
+            askForHostInfosAndAddHost($vhostFile);
         case 'q':
             break 2;
     }
@@ -77,7 +77,7 @@ function readHostnamesFromVhostFile(string $file): array
  */
 function readHostnamesFromSslFile(string $file): array
 {
-    return readHostnamesFromFile($file, '<VirtualHost *:443>', '</VirtualHost>', ':443');
+    return readHostnamesFromFile($file, '<VirtualHost *:443>', '</VirtualHost>', PHP_EOL);
 }
 
 /**
@@ -132,7 +132,7 @@ function parseServerNameInsideVhostItem(string $vhostItem, string $endTag): stri
     return substr(parseItemsInsideTags('ServerName ', $endTag, $vhostItem)[1], 4);
 }
 
-function askForHostInfosAndAddHost(string $vhostFile, string $sslFile): void
+function askForHostInfosAndAddHost(string $vhostFile): void
 {
     $confirm = null;
 
@@ -145,7 +145,6 @@ function askForHostInfosAndAddHost(string $vhostFile, string $sslFile): void
     }
     
     appendVhostToVhostFile($domainName, $folderName, $vhostFile);
-    appendVhostToSslFile($domainName, $folderName, $sslFile);
 
     echo PHP_EOL . PHP_EOL . 'Done !';
 }
@@ -155,19 +154,14 @@ function appendVhostToVhostFile(string $domainName, string $folderName, string $
     appendContentToFile(PHP_EOL
         . '<VirtualHost *:80>
 ServerName www.' . $domainName . '
-Redirect "/" "https://www.' . $domainName . '/"
 ServerAdmin pierre@miniggiodev.fr
 ServerAlias ' . $domainName . '
 DocumentRoot /var/www/html/' . $folderName . '/
 ErrorLog /var/www/logs/' . $folderName . '_error.log
-CustomLog /var/www/logs/' . $folderName . '_devaccess.log combined
+CustomLog /var/www/logs/' . $folderName . '_access.log combined
 <Directory "/var/www/html/' . $folderName . '/">
     AllowOverride All
 </Directory>
-RewriteEngine on
-RewriteCond %{SERVER_NAME} =www.' . $domainName . ' [OR]
-RewriteCond %{SERVER_NAME} =' . $domainName . '
-RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
 </VirtualHost>' . PHP_EOL, $file);
 }
 
