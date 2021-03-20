@@ -164,37 +164,6 @@ CustomLog /var/www/logs/' . $folderName . '_access.log combined
 </VirtualHost>' . PHP_EOL, $file);
 }
 
-function appendVhostToSslFile(string $domainName, string $folderName, string $file): void
-{
-    appendContentToFile(PHP_EOL .
-        '<VirtualHost *:443>
-<Directory "/var/www/html/' . $folderName . '/">
-    AllowOverride All
-</Directory>
-DocumentRoot "/var/www/html/' . $folderName . '"
-ServerName www.' . $domainName . ':443
-ServerAdmin pierre@miniggiodev.fr
-ServerAlias ' . $domainName . '
-ErrorLog logs/ssl_error_log
-TransferLog logs/ssl_access_log
-LogLevel warn
-SSLEngine on
-<Files ~ "\.(cgi|shtml|phtml|php3?)$">
-    SSLOptions +StdEnvVars
-</Files>
-<Directory "/var/www/cgi-bin">
-    SSLOptions +StdEnvVars
-</Directory>
-BrowserMatch "MSIE [2-5]"nokeepalive ssl-unclean-shutdown downgrade-1.0 force-response-1.0
-CustomLog logs/ssl_request_log "%t %h %{SSL_PROTOCOL}x %{SSL_CIPHER}x \"%r\" %b"
-Include /etc/letsencrypt/options-ssl-apache.conf
-ServerAlias www.' . $domainName . '
-SSLCertificateFile /etc/letsencrypt/live/miniggiodev.fr/cert.pem
-SSLCertificateKeyFile /etc/letsencrypt/live/miniggiodev.fr/privkey.pem
-SSLCertificateChainFile /etc/letsencrypt/live/miniggiodev.fr/chain.pem
-</VirtualHost>' . PHP_EOL, $file);
-}
-
 function appendContentToFile(string $content, string $file): void
 {
     file_put_contents($file, $content, FILE_APPEND);
