@@ -154,6 +154,7 @@ function appendVhostToVhostFile(string $domainName, string $folderName, string $
     appendContentToFile(PHP_EOL
         . '<VirtualHost *:80>
 ServerName ' . $domainName . '
+ServerAlias www.' . $domainName . '
 ServerAdmin pierre@miniggiodev.fr
 DocumentRoot /var/www/html/' . $folderName . '/
 ErrorLog /var/www/logs/' . $folderName . '_error.log
