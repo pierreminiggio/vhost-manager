@@ -129,7 +129,7 @@ function parseItemsInsideTags(string $startTag, string $endTag, string $content)
 
 function parseServerNameInsideVhostItem(string $vhostItem, string $endTag): string
 {
-    return substr(parseItemsInsideTags('ServerName ', $endTag, $vhostItem)[1], 4);
+    return parseItemsInsideTags('ServerName ', $endTag, $vhostItem)[1];
 }
 
 function askForHostInfosAndAddHost(string $vhostFile): void
